@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Pyone | Valentines 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            /* Brightened Palette */
+            --bg-gradient-start: #4a192c; /* Lighter Wine */
+            --bg-gradient-end: #2d1018;   /* Darker finish */
+            --accent: #ff4d79;
+            --env-dark: #9d264e;
+            --glass-bg: rgba(80, 30, 50, 0.4); /* More transparent/lighter */
+            --glass-border: rgba(255, 150, 180, 0.3);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            color: #ffe4e6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-cursive { font-family: 'Dancing Script', cursive; }
+
+        /* --- Animations --- */
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .shake-screen {
+            animation: shake 0.5s;
+            animation-iteration-count: 2;
+        }
+
+        /* --- ENVELOPE STYLES --- */
+        .intro-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 50;
+        }
+
+        .envelope-container {
+            position: relative;
+            margin: 40px 0;
+            animation: gentleBounce 2.5s ease-in-out infinite; 
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .envelope-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 77, 121, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--env-dark);
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .letter-content {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 270px;
+            height: 180px;
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .pocket-left {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-style: solid; border-width: 100px 0 100px 150px;
+            border-color: transparent transparent transparent #c03570; z-index: 10;
+        }
+
+        .pocket-right {
+            position: absolute; bottom: 0; right: 0; width: 0; height: 0;
+            border-style: solid; border-width: 100px 150px 100px 0;
+            border-color: transparent #c03570 transparent transparent; z-index: 10;
+        }
+
+        .pocket-bottom {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-style: solid; border-width: 0 150px 110px 150px;
+            border-color: transparent transparent #fa528a transparent; z-index: 11;
+            transform-origin: bottom;
+        }
+
+        .lid {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-style: solid; border-width: 110px 150px 0 150px;
+            border-color: #ff7aa8 transparent transparent transparent;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out, z-index 0.2s;
+            z-index: 20;
+        }
+
+        .tap-instruction {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 30; pointer-events: none; transition: opacity 0.3s ease;
+        }
+
+        .tap-instruction p {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(4px);
+            padding: 8px 18px; border-radius: 30px; color: white;
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; border: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* --- Open States --- */
+        .envelope-wrapper.open .lid { transform: rotateX(180deg); z-index: 1; transition-delay: 0s; }
+        .envelope-wrapper.open .letter-content { transform: translate(-50%, -120px); z-index: 15; transition-delay: 0.4s; }
+        .envelope-wrapper.open + .tap-instruction { opacity: 0; }
+
+        /* --- Layout --- */
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+            /* Lighter Vignette */
+            background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.3) 100%);
+            z-index: 999;
+        }
+
+        .floating-element-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+            z-index: 1000; overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute; bottom: -50px; color: var(--accent);
+            animation: floatUp linear forwards; /* Changed to forwards for rating burst */
+            filter: drop-shadow(0 0 5px rgba(255, 51, 102, 0.5)); opacity: 0;
+        }
+        
+        /* Persistent background hearts */
+        .bg-heart {
+            position: absolute; bottom: -50px;
+            animation: floatUp linear infinite;
+            z-index: 0;
+            opacity: 0;
+        }
+
+        section {
+            min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;
+            padding: 60px 20px; position: relative; z-index: 10;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px; padding: 40px 25px;
+            max-width: 700px; width: 100%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .glass-card h2 { color: #ffadbc; text-shadow: 0 2px 10px rgba(255, 51, 102, 0.3); }
+        .glass-card p { color: #ffe4e6; }
+
+        /* Audio Player */
+        .audio-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px; border-radius: 12px;
+            display: flex; align-items: center; gap: 10px;
+            transition: transform 0.2s; border: 1px solid rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+        }
+        .audio-card:hover { transform: translateY(-2px); }
+        
+        .play-btn {
+            width: 36px; height: 36px; background: var(--accent);
+            border-radius: 50%; color: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 51, 102, 0.4);
+        }
+
+        .audio-wave {
+            height: 20px; flex-grow: 1;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" fill="%23ff3366"><rect x="0" y="8" width="4" height="4"/><rect x="10" y="4" width="4" height="12"/><rect x="20" y="2" width="4" height="16"/><rect x="30" y="8" width="4" height="4"/><rect x="40" y="6" width="4" height="8"/><rect x="50" y="3" width="4" height="14"/><rect x="60" y="9" width="4" height="2"/><rect x="70" y="5" width="4" height="10"/><rect x="80" y="7" width="4" height="6"/><rect x="90" y="9" width="4" height="2"/></svg>');
+            background-repeat: repeat-x; opacity: 0.6;
+        }
+
+        #main-site { display: none; opacity: 0; }
+        
+        /* Gallery */
+        .stack-wrapper { width: 100%; min-height: 450px; position: relative; display: flex; justify-content: center; }
+        .stack-container { position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; padding-top: 20px; perspective: 1000px; }
+        .memory-card {
+            position: absolute; width: 260px; background: white; padding: 10px 10px 40px 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); border-radius: 4px;
+            transition: all 0.5s ease; display: flex; flex-direction: column; align-items: center;
+        }
+        .memory-media { width: 100%; height: 280px; object-fit: cover; border-radius: 2px; background: #fce7f3; pointer-events: none; }
+        .memory-caption { position: absolute; bottom: 12px; font-family: 'Dancing Script', cursive; font-weight: 700; font-size: 1.1rem; color: #4a1a1a; }
+        
+        #collage-grid { display: none; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; opacity: 0; }
+        .grid-item { background: white; padding: 6px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .grid-img { width: 100%; height: 120px; object-fit: cover; }
+        
+        /* Popup Toast */
+        .bruh-toast {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            color: #cc0000;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            z-index: 2000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        @media (min-width: 768px) {
+            #collage-grid { grid-template-columns: repeat(4, 1fr); gap: 15px; }
+            .grid-img { height: 180px; }
+            .memory-card { width: 280px; }
+            .memory-media { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vignette"></div>
+    <div class="floating-element-container" id="effects-container"></div>
+    <!-- Separate container for background hearts -->
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden;" id="bg-hearts"></div>
+
+    <!-- Intro Page -->
+    <div id="intro-page" class="h-screen w-full relative overflow-hidden flex flex-col items-center justify-center">
+        <!-- Lilies - brighter opacity -->
+        <img src="lily.png" class="absolute w-[150px] md:w-[200px] -top-8 -left-8 rotate-[135deg] opacity-90 brightness-110" onerror="this.style.display='none'">
+        <img src="lily.png" class="absolute w-[150px] md:w-[200px] -bottom-8 -right-8 rotate-[-45deg] opacity-90 brightness-110" onerror="this.style.display='none'">
+
+        <div class="intro-layout w-full max-w-lg mx-auto text-center relative">
+            <div class="mb-12 z-50 px-4">
+                <h1 class="text-5xl md:text-7xl font-serif text-pink-100 mb-3 opacity-0 translate-y-4 drop-shadow-lg" id="intro-title">Dear Pyone,</h1>
+                <p class="text-pink-300 font-medium tracking-wide text-lg opacity-0 translate-y-4" id="intro-subtitle">A surprise for our first Valentine's</p>
+            </div>
+
+            <!-- ENVELOPE STRUCTURE -->
+            <div class="relative w-full flex justify-center items-center">
+                <!-- Bouquet Decoration (Intro) -->
+                <img src="bouquet.png" id="intro-bouquet" class="absolute bottom-[-20px] left-[-30px] md:left-[-60px] w-32 md:w-48 z-20 opacity-0 rotate-[-15deg] drop-shadow-2xl pointer-events-none" onerror="this.style.display='none'" alt="Bouquet">
+
+                <!-- Chocolate Decoration (Intro) -->
+                <img src="chocolate.png" id="intro-choco" class="absolute bottom-[-10px] right-[-20px] md:right-[-50px] w-28 md:w-40 z-20 opacity-0 rotate-[10deg] drop-shadow-2xl pointer-events-none" onerror="this.style.display='none'" alt="Chocolates">
+
+                <div class="envelope-container opacity-0" id="envelope-group" onclick="openEnvelope()">
+                    <div class="envelope-glow"></div>
+                    
+                    <div class="envelope-wrapper">
+                        <div class="letter-content">
+                            <p class="font-cursive text-3xl text-pink-600">For You ❤️</p>
+                        </div>
+                        <div class="pocket-left"></div>
+                        <div class="pocket-right"></div>
+                        <div class="pocket-bottom"></div>
+                        <div class="lid"></div>
+                    </div>
+
+                    <div class="tap-instruction">
+                        <p>Tap to Open <i class="ph-bold ph-caret-up"></i></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-pink-300/70 italic text-sm opacity-0 mt-8" id="intro-footer">
+                Made with love by Tony
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-site" class="relative pb-20">
+        
+        <!-- Section 1: The Letter -->
+        <section>
+            <div class="glass-card mx-4 relative">
+                <!-- Bouquet and Chocolate Decorations on Letter -->
+                <img src="bouquet.png" class="absolute w-[120px] md:w-[160px] -bottom-8 -left-8 -rotate-[20deg] z-50 drop-shadow-lg pointer-events-none" onerror="this.style.display='none'">
+                <img src="chocolate.png" class="absolute w-[100px] md:w-[130px] -bottom-6 -right-6 rotate-[15deg] z-50 drop-shadow-lg pointer-events-none" onerror="this.style.display='none'">
+                
+                <!-- Keeping top lily for balance -->
+                <img src="lily.png" class="absolute w-[80px] -top-6 -right-6 rotate-45 z-50 brightness-110" onerror="this.style.display='none'">
+
+                <div class="text-center relative z-10 px-2 md:px-8">
+                    <h2 class="text-3xl md:text-4xl font-serif mb-6 drop-shadow-md text-pink-100">My Dearest Pyone,</h2>
+                    <div class="font-serif text-base md:text-lg leading-loose text-white/90 space-y-4 md:space-y-6 text-left" id="letter-text">
+                        <p class="letter-line opacity-0">Today isn’t just another ordinary Valentine’s Day. It’s our very first one together, and ever since November 20th, everything has felt different in the best way.</p>
+                        <p class="letter-line opacity-0">Even though it’s only been almost three months, we’ve already gone through misunderstandings and tough moments — but we’re still here, still choosing each other. And that means something to me. Life genuinely feels better when I’m with you. Your smile, your presence, your laughter… the way you are — it all just makes sense to me.</p>
+                        <p class="letter-line opacity-0">I’m sorry if there were times you ever felt unloved because I couldn’t express my feelings the way you wanted. I’m really trying. I’m still learning, still growing, still figuring out how to love you better every day. But please know this — my feelings are real.</p>
+                        <p class="letter-line opacity-0">Please don’t get tired of me. I know this is teenage love, and people say things can change overnight. But as long as you’re with me, I’ll always be grateful and happy. Being with you is enough for me.</p>
+                        <p class="letter-line opacity-0 text-center font-bold text-pink-300 mt-6 text-xl font-cursive">- Happy Valentine’s Day, my love. ❤️</p>
+                    </div>
+
+                    <div class="mt-8 md:mt-12 pt-6 border-t border-pink-400/30 flex flex-col items-center">
+                        <p class="text-xs tracking-widest text-pink-200 uppercase mb-2">Time Together</p>
+                        <div id="stopwatch" class="text-md md:text-xl font-mono font-bold text-white bg-pink-900/40 px-4 py-2 rounded-full border border-pink-400/30 shadow-inner">
+                            Calculating...
+                        </div>
+                        <p id="countdown" class="text-xs md:text-sm font-bold text-pink-300 mt-2 text-center px-4"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Slideshow -->
+        <section>
+            <div class="w-full max-w-5xl flex flex-col items-center px-4">
+                <h2 class="text-4xl md:text-5xl font-serif mb-2 text-pink-100 drop-shadow-lg">Snaps</h2>
+                <p class="text-pink-300 mb-6 font-medium text-sm md:text-base" id="gallery-instruction">Tap the card to reveal the next memory</p>
+                
+                <div class="stack-wrapper">
+                    <div class="stack-container" id="stack-container"></div>
+                    <div id="collage-grid"></div>
+                </div>
+                <div class="mt-4"><p class="text-pink-300 italic text-sm" id="gallery-status">Viewing 1 of 10</p></div>
+            </div>
+        </section>
+
+        <!-- Section 3: Audio Players -->
+        <section>
+            <div class="glass-card mx-4">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-serif mb-2">Lovely Voices</h2>
+                    <p class="text-pink-200 text-sm">Little notes to keep forever</p>
+                </div>
+
+                <!-- Her Voices -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                    <!-- Morning -->
+                    <div class="audio-card">
+                        <div class="play-btn" data-audio="arbwr.mp3" onclick="playAudio(this)"><i class="ph ph-play"></i></div>
+                        <div class="text-xs font-bold text-gray-800">arbwr arbwr</div>
+                        <div class="audio-wave"></div>
+                    </div>
+                    <!-- Laugh -->
+                    <div class="audio-card">
+                        <div class="play-btn" data-audio="koko.mp3" onclick="playAudio(this)"><i class="ph ph-play"></i></div>
+                        <div class="text-xs font-bold text-gray-800">koko game ma sok pr nek</div>
+                        <div class="audio-wave"></div>
+                    </div>
+                    <!-- Singing -->
+                    <div class="audio-card">
+                        <div class="play-btn" data-audio="drunk.mp3" onclick="playAudio(this)"><i class="ph ph-play"></i></div>
+                        <div class="text-xs font-bold text-gray-800">Nga muu ma</div>
+                        <div class="audio-wave"></div>
+                    </div>
+                </div>
+
+                <!-- My Voice -->
+                <div class="border-t border-pink-400/30 pt-4">
+                    <p class="text-center text-xs text-pink-200 uppercase tracking-widest mb-3">From Me</p>
+                    <div class="audio-card bg-pink-100 border-pink-300 shadow-md" style="max-width: 320px; margin: 0 auto;">
+                        <div class="play-btn bg-pink-600" data-audio="message.m4a" onclick="playAudio(this)"><i class="ph ph-play"></i></div>
+                        <div class="text-sm font-bold text-pink-900">My Message to You</div>
+                        <div class="audio-wave" style="opacity: 0.8"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Final Message -->
+        <section>
+            <div class="glass-card text-center mx-4">
+                <h2 class="text-3xl md:text-4xl font-serif mb-6 text-pink-200">Why I Love You</h2>
+                <div class="text-lg md:text-xl italic font-serif text-white/90 space-y-6">
+                    <p class="reveal-text">"Everything about you motivates me and keep my inner child alive."</p>
+                    <p class="reveal-text"> A yan chit tal thel tone yay , happy valetine's naw . </p>
+                    <div class="reveal-text mt-8 p-6 md:p-8 border border-pink-400/30 rounded-xl inline-block bg-pink-900/40 backdrop-blur-md">
+                        <p class="font-bold text-pink-100 text-2xl">Happy Valentine's Day, My Love.</p>
+                        <div class="mt-4 text-3xl flex justify-center gap-4">
+                            <span class="animate-bounce" style="animation-delay: 0s">🌷</span>
+                            <span class="animate-bounce" style="animation-delay: 0.2s">💖</span>
+                            <span class="animate-bounce" style="animation-delay: 0.4s">🌷</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: RATING SYSTEM -->
+        <section class="min-h-[50vh]">
+            <div class="glass-card text-center mx-4 max-w-md w-full">
+                <h2 class="text-2xl font-serif mb-4 text-white">Rate this surprise?</h2>
+                <div class="flex flex-col gap-4 items-center">
+                    <div class="flex items-center gap-2 bg-white/10 rounded-lg p-2 border border-white/20 w-full max-w-[200px]">
+                        <input type="number" id="rating-input" placeholder="1-10" class="bg-transparent text-white text-center w-full outline-none font-bold text-xl placeholder-pink-300/50" min="0" max="100">
+                        <span class="text-pink-300 font-bold pr-2">/10</span>
+                    </div>
+                    
+                    <button onclick="submitRating()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-8 rounded-full shadow-lg transform transition active:scale-95">
+                        Submit
+                    </button>
+                    
+                    <p id="rating-response" class="h-8 font-bold text-lg mt-2 text-pink-200 transition-all duration-300"></p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="text-center text-pink-400/40 text-xs pb-8">
+            Infinite Love for Pyone
+        </div>
+    </div>
+
+    <!-- Hidden Audio Player Engine -->
+    <audio id="bg-music" loop src="music.mp3"></audio>
+    <audio id="sfx-player"></audio>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        const START_DATE = "2025-11-20T00:00:00"; 
+        
+        // --- MEMORIES DATA ---
+        // REPLACE WITH REAL IMAGES (e.g. 'photo1.jpg')
+        
+
+const memories = [
+    { src: 'photo1.jpg', type: 'image', caption: 'Our First Date ' },
+    { src: 'photo2.jpg', type: 'image', caption: 'late night walks' },
+    { src: 'photo3.jpg', type: 'image', caption: 'ha' },
+    { src: 'photo4.png', type: 'image', caption: ' Princess' },
+    { src: 'photo5.png', type: 'image', caption: 'how cute' },
+    { src: 'photo6.jpg', type: 'image', caption: 'ok' },
+    { src: 'photo7.jpg', type: 'image', caption: 'haha' },
+    { src: 'photo8.jpg', type: 'image', caption: 'lovely' },
+    { src: 'photo9.jpg', type: 'image', caption: 'phone pal thone nay' },
+    { src: 'photo10.jpg', type: 'image', caption: 'heartopia' }
+];
+
+
+
+        // --- BACKGROUND HEARTS ---
+        function createBgHearts() {
+            const container = document.getElementById('bg-hearts');
+            const heartCount = 15; // Fewer hearts for cleaner look
+            const symbols = ['❤', '✨', '🌸'];
+            
+            for(let i=0; i<heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('bg-heart');
+                heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 15 + 20) + 's'; // Slower
+                heart.style.animationDelay = (Math.random() * 10) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                heart.style.color = "rgba(255, 182, 193, 0.3)"; // Very subtle pink
+                container.appendChild(heart);
+            }
+        }
+        createBgHearts();
+
+        // --- ENVELOPE LOGIC ---
+        let envelopeOpen = false;
+
+        window.onload = () => {
+            const tl = gsap.timeline();
+            tl.to("#intro-title", { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" })
+              .to("#intro-subtitle", { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+              .to("#envelope-group", { opacity: 1, duration: 1.5 }, "-=0.5")
+              // Add animations for the new bouquet and chocolate
+              .to("#intro-bouquet", { opacity: 1, duration: 1.2, x: 0, ease: "back.out(1.7)" }, "-=1.2")
+              .to("#intro-choco", { opacity: 1, duration: 1.2, x: 0, ease: "back.out(1.7)" }, "-=1.0")
+              .to("#intro-footer", { opacity: 1, duration: 1 }, "-=0.5");
+            
+            initSlideshow();
+        };
+
+        function openEnvelope() {
+            if (envelopeOpen) return;
+            envelopeOpen = true;
+
+            document.querySelector('.envelope-container').style.animation = 'none';
+            document.querySelector('.tap-instruction').style.opacity = '0';
+
+            // Play BG Music
+            const bgAudio = document.getElementById('bg-music');
+            bgAudio.volume = 0.4;
+            bgAudio.play().catch(e => console.log("Audio requires interaction"));
+
+            const envWrapper = document.querySelector('.envelope-wrapper');
+            envWrapper.classList.add('open');
+
+            setTimeout(() => {
+                const tl = gsap.timeline();
+                tl.to("#intro-page", { 
+                    opacity: 0, 
+                    duration: 1.0, 
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        document.getElementById("intro-page").style.display = "none";
+                        const mainSite = document.getElementById("main-site");
+                        mainSite.style.display = "block";
+                        gsap.to("#main-site", { opacity: 1, duration: 1.5 });
+                        ScrollTrigger.refresh();
+                        initMainAnimations();
+                    } 
+                });
+            }, 1800); 
+        }
+
+        function initMainAnimations() {
+            gsap.to(".letter-line", {
+                scrollTrigger: { trigger: "#letter-text", start: "top 80%" },
+                opacity: 1, y: 0, duration: 1, stagger: 0.3, ease: "power2.out"
+            });
+            gsap.utils.toArray(".reveal-text").forEach(text => {
+                gsap.fromTo(text, 
+                    { opacity: 0, y: 30 },
+                    { scrollTrigger: { trigger: text, start: "top 90%" }, opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+                );
+            });
+        }
+
+        // --- SLIDESHOW ---
+        let currentCardIndex = 0;
+        function initSlideshow() {
+            const container = document.getElementById('stack-container');
+            container.innerHTML = ''; 
+            [...memories].reverse().forEach((mem, i) => {
+                const realIndex = memories.length - 1 - i;
+                const card = document.createElement('div');
+                card.className = 'memory-card cursor-pointer';
+                card.style.zIndex = i + 1; 
+                card.onclick = (e) => handleCardClick(e, realIndex);
+                card.innerHTML = `<img src="${mem.src}" class="memory-media"><div class="memory-caption">${mem.caption}</div>`;
+                if (i < memories.length - 1) { 
+                    gsap.set(card, { rotation: (Math.random() - 0.5) * 8 });
+                }
+                container.appendChild(card);
+            });
+        }
+
+        function handleCardClick(e, index) {
+            const card = e.currentTarget;
+            gsap.to(card, {
+                x: (Math.random() - 0.5) * 400 + 100, y: -100, rotation: (Math.random() - 0.5) * 60, opacity: 0, duration: 0.6, ease: "power2.inOut",
+                onComplete: () => card.style.display = 'none'
+            });
+            currentCardIndex++;
+            if (currentCardIndex >= memories.length) {
+                document.getElementById('gallery-status').innerText = "All memories unlocked!";
+                document.getElementById('gallery-instruction').innerText = "Here is our collection ❤️";
+                setTimeout(revealGrid, 400);
+            } else {
+                document.getElementById('gallery-status').innerText = `Viewing ${currentCardIndex + 1} of ${memories.length}`;
+            }
+        }
+
+        function revealGrid() {
+            const stackContainer = document.getElementById("stack-container");
+            const grid = document.getElementById('collage-grid');
+            gsap.to(stackContainer, { opacity: 0, duration: 0.5, onComplete: () => {
+                stackContainer.style.display = 'none';
+                grid.style.display = 'grid';
+                grid.innerHTML = memories.map(mem => `
+                    <div class="grid-item">
+                        <img src="${mem.src}" class="grid-img">
+                        <div class="text-xs text-gray-400 text-center mt-2 font-bold">${mem.caption}</div>
+                    </div>`).join('');
+                gsap.to(grid, { opacity: 1, duration: 0.5 });
+                gsap.to(".grid-item", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" });
+            }});
+        }
+
+        // --- STOPWATCH ---
+        function updateTime() {
+            const start = new Date(START_DATE).getTime();
+            const threeMonthAnni = new Date("2026-02-20T00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const diff = now - start;
+                const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const months = Math.floor(totalDays / 30.44); 
+                const daysRemainder = Math.floor(totalDays % 30.44);
+                const secondsTotal = Math.floor(diff / 1000);
+                document.getElementById("stopwatch").innerHTML = `${months} Mos / ${daysRemainder} Days / ${secondsTotal.toLocaleString()} Secs`;
+                
+                const tilAnni = threeMonthAnni - now;
+                if(tilAnni > 0) {
+                    const daysLeft = Math.ceil(tilAnni / (1000 * 60 * 60 * 24));
+                    document.getElementById("countdown").innerHTML = `${daysLeft} days until our 3-month milestone (Feb 20)!`;
+                } else {
+                    document.getElementById("countdown").innerHTML = "Happy 3-Months Anniversary! ❤️";
+                }
+            }, 1000);
+        }
+        updateTime();
+
+        // --- RATING SYSTEM ---
+        function submitRating() {
+            const input = document.getElementById('rating-input');
+            const val = parseFloat(input.value);
+            const responseText = document.getElementById('rating-response');
+            const container = document.getElementById('effects-container');
+
+            if(isNaN(val)) return;
+
+            if (val < 5) {
+                // UNDER 5: ANGRY
+                responseText.innerText = "Really bruh?? 🤨";
+                responseText.style.color = "#ff9999";
+                document.body.classList.add('shake-screen');
+                setTimeout(() => document.body.classList.remove('shake-screen'), 500);
+                
+                // Show popups
+                const msgs = ["Bruh...", "Seriously?", "Wow...", "Try again!"];
+                for(let i=0; i<4; i++) {
+                    setTimeout(() => {
+                        const toast = document.createElement('div');
+                        toast.className = 'bruh-toast';
+                        toast.innerText = msgs[i];
+                        toast.style.left = (20 + Math.random() * 60) + '%';
+                        toast.style.top = (20 + Math.random() * 60) + '%';
+                        document.body.appendChild(toast);
+                        gsap.to(toast, { scale: 1, duration: 0.3, ease: "back.out(1.7)" });
+                        gsap.to(toast, { opacity: 0, delay: 1.5, onComplete: () => toast.remove() });
+                    }, i * 300);
+                }
+
+            } else if (val >= 5 && val <= 10) {
+                // 5 TO 10: HEARTS
+                responseText.innerText = "Yay! Love you! ❤️";
+                responseText.style.color = "#ffe4e6";
+                createExplosion('❤', 30);
+                
+            } else {
+                // OVER 10: INSANE MODE
+                responseText.innerText = "HAHAHAH over 10? damn worth the effort hahahah love u mwah  😘❤️";
+                responseText.style.color = "#ff3366";
+                responseText.style.fontSize = "1.5rem";
+                createExplosion('💋', 50);
+                createExplosion('💖', 50);
+                createExplosion('🥰', 30);
+            }
+        }
+
+        function createExplosion(symbol, count) {
+            const container = document.getElementById('effects-container');
+            for(let i=0; i<count; i++) {
+                const el = document.createElement('div');
+                el.classList.add('floating-heart');
+                el.innerText = symbol;
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.bottom = '-50px';
+                el.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                el.style.animationDuration = (Math.random() * 2 + 2) + 's'; // Fast float up
+                container.appendChild(el);
+                
+                // Cleanup
+                setTimeout(() => el.remove(), 4000);
+            }
+        }
+
+        // --- AUDIO ---
+        function playAudio(btn) {
+            const file = btn.getAttribute('data-audio');
+            const icon = btn.querySelector('i');
+            const sfxPlayer = document.getElementById('sfx-player');
+            const bgMusic = document.getElementById('bg-music');
+
+            document.querySelectorAll('.play-btn i').forEach(i => {
+                if(i !== icon) {
+                    i.classList.remove('ph-pause'); i.classList.add('ph-play');
+                    i.parentElement.style.animation = 'none';
+                }
+            });
+
+            if(icon.classList.contains('ph-pause')) {
+                sfxPlayer.pause();
+                icon.classList.remove('ph-pause'); icon.classList.add('ph-play');
+                btn.style.animation = 'none';
+                bgMusic.volume = 0.4;
+            } else {
+                sfxPlayer.src = file;
+                bgMusic.volume = 0.1;
+                sfxPlayer.play();
+                icon.classList.remove('ph-play'); icon.classList.add('ph-pause');
+                btn.style.animation = 'pulse 1s infinite';
+                sfxPlayer.onended = () => {
+                    icon.classList.remove('ph-pause'); icon.classList.add('ph-play');
+                    btn.style.animation = 'none';
+                    bgMusic.volume = 0.4;
+                };
+            }
+        }
+    </script>
+</body>
+</html>
